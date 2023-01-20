@@ -12,7 +12,7 @@
     <div>
         <a href="{% url 'update-room' room.id %}">Edit</a>
         {% comment %} To Do - Delete {% endcomment %}
-        <a href="">Delete</a>
+        <a href="{% url 'delete-room' room.id %}">Delete</a>
         <span>@{{room.host.username}}</span>
         <p><a href="{% url 'room' room.id %}">{{room.name}}</a></p>
         <small>{{room.topic}}</small>
