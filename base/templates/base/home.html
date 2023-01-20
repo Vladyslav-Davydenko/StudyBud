@@ -1,8 +1,8 @@
 {% extends 'main.html' %}
 
-{% block content %}
+{% load static %}
 
-<h1>Hello World!</h1>
+{% block content %}
 
 <style>
     .home-container{
@@ -33,13 +33,16 @@
     <div>
         <h5>{{rooms_count}} room{{rooms_count|pluralize:"s"}} available</h5>
 
+        
         <a href="{% url 'create-room' %}">Create Room</a>
 
         {% for room in rooms %}
         <div>
+            {% if request.user == room.host %}
             <a href="{% url 'update-room' room.id %}">Edit</a>
             {% comment %} To Do - Delete {% endcomment %}
             <a href="{% url 'delete-room' room.id %}">Delete</a>
+            {% endif %}
             <span>@{{room.host.username}}</span>
             <p><a href="{% url 'room' room.id %}">{{room.name}}</a></p>
             <small>{{room.topic}}</small>

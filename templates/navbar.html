@@ -1,7 +1,11 @@
-<a href="https://www.youtube.com/watch?v=ZZ5LpwO-An4&t=55s"><h2>LogIn</h2></a>
-
 <form method-"GET" action-"(% uri 'home' %}",>
 <input type-"text" name="q" placeholder="Search Rooms..."/> 
 </form>
+
+{% if request.user.is_authenticated %}
+    <a href="{% url 'logout' %}">LogOut</a>
+{% else %}
+    <a href="{% url 'login' %}">LogIn</a>
+{% endif %}
 
 <hr>
