@@ -4,9 +4,9 @@
 
 <form method="POST" action="">
     {% csrf_token %}
-    <p>Are you sure you want to delete "{{room.name}}"?</p>
+    <p>Are you sure you want to delete "{{room}}"?</p>
 
-    <a href="{% url 'home' %}">Go Back</a>
+    <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
     <input type="submit" value="Confirm" />
 </form>
 
