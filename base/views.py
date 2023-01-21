@@ -6,10 +6,11 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .utils import searchProject
 from .models import Room, Topic
-from .forms import RoomForm
+from .forms import RoomForm, CustomUserCreationForm
 
 
 def loginPage(request):
+    page = "login"
 
     if request.user.is_authenticated:
         return redirect("home")
@@ -32,7 +33,7 @@ def loginPage(request):
             return redirect('home')
         else:
             messages.error(request, 'Username or password is incorrect')
-    context = {}
+    context = {"page": page}
     return render(request, "base/login_register.html", context) 
 
 
@@ -40,6 +41,28 @@ def logoutPage(request):
     logout(request)
     messages.info(request, 'User was logged out')
     return redirect('home')
+
+
+def registerPage(request):
+    page = "register"
+    form = CustomUserCreationForm()
+
+    if request.method == "POST":
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            # commit=False -> freeze object to proces it before saving in DB
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+
+            messages.success(request, "New User was created")
+            login(request, user) 
+            return redirect('home')
+        else:
+            messages.error(request, "An error occured creating a user")
+
+    context ={'page': page, 'form': form }
+    return render(request, 'base/login_register.html', context)    
 
 
 def home(request):
