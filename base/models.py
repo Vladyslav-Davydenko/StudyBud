@@ -44,3 +44,6 @@ class Message(models.Model):
             return f"{self.body[0:50]}..."
         else:
             return f"{self.body}"
+
+    class Meta():
+        ordering = ['-updated', '-created']
