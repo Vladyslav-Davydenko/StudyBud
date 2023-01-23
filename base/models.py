@@ -16,7 +16,7 @@ class Room(models.Model):
     # null allows leave it empty in DB
     # blank allows to leave form empty
     description = models.TextField(null=True, blank=True)
-    # participents = 
+    participents = models.ManyToManyField(User, related_name="participents", blank=True)
     # auto_now update timestamp after every changes
     # auto_now_add create timestamp only ones 
     updated = models.DateTimeField(auto_now=True)
