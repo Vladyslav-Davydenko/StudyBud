@@ -60,7 +60,7 @@
             <p>Hosted By</p>
             <a href="{% url 'profile' room.host.id %}" class="room__author">
               <div class="avatar avatar--small">
-                <img src="{{room.host.avatar.url}}" />
+                <img src="#" />
               </div>
               <span>@{{room.host.username}}</span>
             </a>
@@ -83,7 +83,7 @@
                 <div class="thread__author">
                   <a href="{% url 'profile' message.user.id %}" class="thread__authorInfo">
                     <div class="avatar avatar--small">
-                      <img src="{{message.user.avatar.url}}" />
+                      <img src="#" />
                     </div>
                     <span>@{{message.user.username}}</span>
                   </a>
@@ -126,9 +126,9 @@
       <h3 class="participants__top">Participants <span>({{participants.count}} Joined)</span></h3>
       <div class="participants__list scroll">
         {% for user in participants %}
-        <a href="{%  url 'user-profile' user.id %}" class="participant">
+        <a href="{%  url 'profile' user.id %}" class="participant">
           <div class="avatar avatar--medium">
-            <img src="{{user.avatar.url}}" />
+            <img src="#" />
           </div>
           <p>
             {{user.name}}
@@ -141,5 +141,5 @@
     <!--  End -->
   </div>
 </main>
-<script src="script.js"></script>
+<!--<script src="script.js"></script>-->
 {% endblock content %}
