@@ -8,4 +8,4 @@ def searchProject(request):
         Q(name__icontains=q) |
         Q(description__icontains=q)
         )
-    return rooms
+    return rooms, q

@@ -66,8 +66,7 @@ def registerPage(request):
 
 
 def home(request):
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
-    rooms = searchProject(request)
+    rooms, q = searchProject(request)
     rooms_count = rooms.count()
     topics = Topic.objects.all()
     room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
