@@ -184,3 +184,14 @@ def updateUser(request, pk):
     
     context = {"form": form}
     return render(request, 'base/update-user.html', context)
+
+def topicsPage(request):
+    topics = Topic.objects.all()
+    context = {"topics": topics}
+    return render(request, "base/topics.html", context)
+
+
+def activityPage(request):
+    messages = Message.objects.all()
+    context = {"room_messages": messages}
+    return render(request, "base/activity.html", context)
