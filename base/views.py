@@ -6,7 +6,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .utils import searchProject
 from .models import Room, Topic, Message
-from .forms import RoomForm, CustomUserCreationForm
+from .forms import RoomForm, CustomUserCreationForm, UserUpdateForm
 
 
 def loginPage(request):
@@ -169,3 +169,18 @@ def deleteMessage(request, pk):
         return redirect('home')
     context = {"obj": message}
     return render(request, "base/delete.html", context)
+
+
+@login_required(login_url="login")
+def updateUser(request, pk):
+    user = User.objects.get(id=pk)
+    form = UserUpdateForm(instance=user)
+
+    if request.method == "POST":
+        form = UserUpdateForm(request.POST, instance=user)
+        if form.is_valid():
+            user.save()
+            return redirect('profile', pk=user.id)
+    
+    context = {"form": form}
+    return render(request, 'base/update-user.html', context)

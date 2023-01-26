@@ -16,3 +16,9 @@ class CustomUserCreationForm(UserCreationForm):
         labels = {
             'first_name': 'Name',
         }
+
+
+class UserUpdateForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
