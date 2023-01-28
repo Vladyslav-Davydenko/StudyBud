@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .utils import searchProject
-from .models import Room, Topic, Message
+from .models import Room, Topic, Message, User
 from .forms import RoomForm, CustomUserCreationForm, UserUpdateForm
 
 
@@ -17,16 +16,16 @@ def loginPage(request):
 
 
     if request.method == "POST":
-        username = request.POST['username']
+        email = request.POST['email']
         password = request.POST['password']
 
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(email=email)
         except:
             # messages.error(request, 'Username does not exist')
             pass
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request, user)
@@ -177,7 +176,7 @@ def updateUser(request, pk):
     form = UserUpdateForm(instance=user)
 
     if request.method == "POST":
-        form = UserUpdateForm(request.POST, instance=user)
+        form = UserUpdateForm(request.POST,request.FILES, instance=user)
         if form.is_valid():
             user.save()
             return redirect('profile', pk=user.id)

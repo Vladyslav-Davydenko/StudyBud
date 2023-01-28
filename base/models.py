@@ -1,9 +1,21 @@
 from django.db import models
 import uuid
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+
+
+class User(AbstractUser):
+    name = models.CharField(max_length=255, null=True)
+    email = models.EmailField(unique=True, null=True)
+    bio = models.TextField(null=True)
+
+    avatar = models.ImageField(null=True, default="avatar.svg")
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
 class Topic(models.Model):
     name = models.CharField(max_length=255)
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     def __str__(self):
         return self.name
