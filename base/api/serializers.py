@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from base.models import Room, Topic
-from django.contrib.auth.models import User
+from base.models import Room, Topic, User
 
 
 class ProfileSerializer(serializers.ModelSerializer):
