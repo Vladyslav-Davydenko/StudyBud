@@ -42,23 +42,29 @@ class RoomDetails(APIView):
     def get_object(self, pk):
         try:
             return Room.objects.get(id=pk)
-        except:
-            return Response("Room does not exist")
+        except Room.DoesNotExist:
+            return None
 
 
     def get(self, request, pk):
         room = self.get_object(pk)
+        if not room :
+            return Response("Room does not exist")
         serializer = RoomSerializer(room, many=False)
         return Response(serializer.data)
 
 
     def delete(self, request, pk):
         room = self.get_object(pk)
+        if not room :
+            return Response("Room does not exist")
         room.delete()
         return Response("Room was deleted")
 
     def patch(self, request, pk):
         room = self.get_object(pk)
+        if not room :
+            return Response("Room does not exist")
         topic_name = request.data['topic']
         topic, created = Topic.objects.get_or_create(name=topic_name)
 
@@ -94,15 +100,19 @@ class TopicDetails(APIView):
         try:
             return Topic.objects.get(id=pk)
         except:
-            return Response("Topic does not exist")
+            return None
     
     def get(self, request, pk):
         topic = self.get_object(pk)
+        if not topic :
+            return Response("Topic does not exist")
         serializer = SingleTopicSerializer(topic, many=False)
         return Response(serializer.data)
     
     def patch(self, request, pk):
         topic = self.get_object(pk)
+        if not topic :
+            return Response("Topic does not exist")
         topic.name = request.data["name"]   
         topic.save()
         serializer = SingleTopicSerializer(topic, many=False)
@@ -110,5 +120,7 @@ class TopicDetails(APIView):
 
     def delete(self, request, pk):
         topic = self.get_object(pk)
+        if not topic :
+            return Response("Topic does not exist")
         topic.delete()
         return Response("Room was deleted")
