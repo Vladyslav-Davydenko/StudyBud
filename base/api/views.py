@@ -62,9 +62,9 @@ class RoomDetails(APIView):
         topic_name = request.data['topic']
         topic, created = Topic.objects.get_or_create(name=topic_name)
 
-        room.host = room.host
+        room.host = User.objects.get(email=request.data["email"])
         room.topic = topic
-        room.name = request.data['name'],
+        room.name = request.data['name']
         room.description = request.data['description']
         room.save()
         serializer = RoomSerializer(room, many=False)
