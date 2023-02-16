@@ -13,6 +13,12 @@ class TopicSerializer(serializers.ModelSerializer):
         model = Topic
         fields = '__all__'
 
+class SingleTopicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Topic
+        fields = ['name']
+
+
 class RoomSerializer(serializers.ModelSerializer):
     host = ProfileSerializer(many=False)
     topic = TopicSerializer(many=False)
@@ -21,3 +27,4 @@ class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = '__all__'
+

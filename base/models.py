@@ -14,7 +14,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
 class Topic(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(unique=True, max_length=255)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     def __str__(self):
