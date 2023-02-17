@@ -1,9 +1,8 @@
 from rest_framework.decorators import api_view, APIView, permission_classes
 from rest_framework.response import Response 
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from django.http import JsonResponse
+from rest_framework.permissions import IsAuthenticated
 from base.models import Room, Topic, User
-from .serializers import RoomSerializer, TopicSerializer, SingleTopicSerializer
+from .serializers import RoomSerializer, TopicSerializer, SingleTopicSerializer, ProfileSerializer
 from django.db import IntegrityError
 
 @api_view(['GET'])
@@ -124,3 +123,15 @@ class TopicDetails(APIView):
             return Response("Topic does not exist")
         topic.delete()
         return Response("Room was deleted")
+
+
+@api_view(["GET", "PUT"])
+@permission_classes([IsAuthenticated])
+def addParticipents(request, pk):
+    room = Room.objects.get(id=pk)
+    if request.method == "PUT":
+        user = User.objects.get(email=request.data["email"])
+        room.participents.add(user)
+        room.save()
+    serializer = ProfileSerializer(room.participents, many=True)
+    return Response(serializer.data)
