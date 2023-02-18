@@ -7,6 +7,11 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'email']
 
+class SingleProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'is_superuser', 'username', 'email', 'bio', 'avatar']
+
 
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:

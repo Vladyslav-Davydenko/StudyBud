@@ -1,8 +1,9 @@
 from rest_framework.decorators import api_view, APIView, permission_classes
 from rest_framework.response import Response 
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import JSONParser
 from base.models import Room, Topic, User
-from .serializers import RoomSerializer, TopicSerializer, SingleTopicSerializer, ProfileSerializer
+from .serializers import RoomSerializer, TopicSerializer, SingleTopicSerializer, ProfileSerializer, SingleProfileSerializer
 from django.db import IntegrityError
 
 @api_view(['GET'])
@@ -122,7 +123,7 @@ class TopicDetails(APIView):
         if not topic :
             return Response("Topic does not exist")
         topic.delete()
-        return Response("Room was deleted")
+        return Response("Topic was deleted")
 
 
 @api_view(["GET", "PUT"])
@@ -135,3 +136,60 @@ def addParticipents(request, pk):
         room.save()
     serializer = ProfileSerializer(room.participents, many=True)
     return Response(serializer.data)
+
+
+@api_view(["GET", "POST"])
+def getUsers(request):
+    if request.method == "GET":
+        users = User.objects.all()
+        serializer = ProfileSerializer(users, many=True)
+        return Response(serializer.data)
+    elif request.method == "POST":
+        try:
+            user = User.objects.create(
+                username = request.data['username'],
+                email = request.data['email'],
+            )
+            user.save()
+        except IntegrityError:
+            return Response("User already exists")
+
+        serializer = SingleProfileSerializer(user, many=False)
+        return Response(serializer.data)
+
+
+@permission_classes([IsAuthenticated])
+class UserDetails(APIView):
+    def get_object(self, email):
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = None
+        return user
+    
+    def get(self, request, email):
+        user = self.get_object(email)
+        if not user:
+            return Response("User does not exist")
+        serializer = SingleProfileSerializer(user, many=False)
+        return Response(serializer.data)
+        
+    def delete(self, request, email):
+        user = self.get_object(email)
+        if user:
+            user.delete()
+            return Response("User was successfully deleted")
+        else:
+            return Response("Can not delete non-existed user")
+
+    def put(self, request, email):
+        user = self.get_object(email)
+        if not user:
+            return Response("User does not exist")
+
+        user_details = JSONParser().parse(request)
+        serializer = SingleProfileSerializer(user, data=user_details)
+        if serializer.is_valid(): 
+            serializer.save() 
+            return Response(serializer.data)
+        return Response("Incorrect input")

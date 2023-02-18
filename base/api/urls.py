@@ -17,6 +17,9 @@ urlpatterns = [
     path("topics", views.getTopics, name="topics"),
     path("topics/<str:pk>", views.TopicDetails.as_view(), name="single-topic"),
 
+    #Users
+    path("users", views.getUsers, name="users"),
+    path("users/<str:email>", views.UserDetails.as_view(), name="single-user"),
 
     #Token
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
